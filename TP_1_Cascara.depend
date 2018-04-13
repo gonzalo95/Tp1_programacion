@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1523490411 source:c:\users\planta alta\desktop\newfolder\utn\tp_1_cascara\funciones.c
+	<stdio.h>
+	<stdlib.h>
+
+1523562980 source:c:\users\planta alta\desktop\newfolder\utn\tp_1_cascara\main.c
+	<stdio.h>
+	<stdlib.h>
+	"funciones.h"
+
+1523490413 c:\users\planta alta\desktop\newfolder\utn\tp_1_cascara\funciones.h
+

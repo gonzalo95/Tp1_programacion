@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1526067238 source:c:\users\planta alta\desktop\newfolder\utn\homework\labo-prog 1\tp2 - fecha -- 11 - 5 -2018\tp_2_cascara\main.c
+	<stdio.h>
+	<stdlib.h>
+	"funciones.h"
+
+1526068660 c:\users\planta alta\desktop\newfolder\utn\homework\labo-prog 1\tp2 - fecha -- 11 - 5 -2018\tp_2_cascara\funciones.h
+
+1526067549 source:c:\users\planta alta\desktop\newfolder\utn\homework\labo-prog 1\tp2 - fecha -- 11 - 5 -2018\tp_2_cascara\funciones.c
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+	"funciones.h"
+

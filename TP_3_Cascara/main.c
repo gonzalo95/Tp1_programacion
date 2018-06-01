@@ -9,11 +9,10 @@ int main()
 {
     char seguir = 's';
     int opcion = 0;
-    EMovie aux;
     EMovie lista[TAM];
-    int auxIndex;
+    int auxId;
     int cantidadPeliculas;
-    int i;
+    int auxIndex;
 
     inicializarArray(lista, TAM);
     if(cargarArray(lista, TAM) == 0)
@@ -39,82 +38,57 @@ int main()
         switch(opcion)
         {
             case 1:
-                printf("\nTitulo: ");
-                fflush(stdin);
-                gets(aux.titulo);
-                printf("\nGenero: ");
-                fflush(stdin);
-                gets(aux.genero);
-                printf("\nDuracion: ");
-                scanf("%d", &(aux.duracion));
-                printf("\nDescripcion: ");
-                fflush(stdin);
-                gets(aux.descripcion);
-                printf("\nPuntaje: ");
-                scanf("%d", &(aux.puntaje));
+
+                auxIndex = buscarEspacioLibre(lista, TAM);
+                if(auxIndex == -1)
+                {
+                    printf("No hay mas espacio\n");
+                    break;
+                }
+
+                pedirAlfanumerico("\nTitulo: ", lista[auxIndex].titulo);
+                pedirCadena("\nGenero: ", lista[auxIndex].genero);
+                lista[auxIndex].duracion = pedirNumero("\nDuracion: ");
+                pedirAlfanumerico("\nDescripcion: ", lista[auxIndex].descripcion);
+                lista[auxIndex].puntaje = pedirNumero("\nPuntaje: ");
                 printf("\nLink de imagen: ");
                 fflush(stdin);
-                gets(aux.linkImagen);
-                aux.estado = 1;
-                aux.id = obtenerId(lista, TAM);
+                gets(lista[auxIndex].linkImagen);
+                lista[auxIndex].estado = 1;
+                lista[auxIndex].id = obtenerId(lista, TAM);
 
                 cantidadPeliculas++;
 
-                if(agregarPelicula(aux) == 0)
+                if(agregarPelicula(lista[auxIndex]) == 0)
                     printf("Se ha producido un error\n");
 
                 break;
 
             case 2:
-                inicializarArray(lista, TAM);
-                cargarArray(lista, TAM);
-                listar(lista, TAM);
-                auxIndex = pedirId(lista, TAM);
 
-                if(auxIndex == -1)
+                listar(lista, TAM);
+                auxId = pedirId(lista, TAM);
+
+                if(auxId == -1)
                     break;
 
-                lista[auxIndex].estado = 0;
-                remove("movies.dat");
-                for(i = 0; i < TAM; i++)
-                {
-                    agregarPelicula(lista[i]);
-                }
-                cantidadPeliculas--;
+                if(borrarPelicula(lista, TAM, auxId) == -1)
+                    printf("Id inexistente\n");
+                else
+                    cantidadPeliculas--;
 
                 break;
 
             case 3:
-                inicializarArray(lista, TAM);
-                cargarArray(lista, TAM);
-                listar(lista, TAM);
-                auxIndex = pedirId(lista, TAM);
 
-                if(auxIndex == -1)
+                listar(lista, TAM);
+                auxId = pedirId(lista, TAM);
+
+                if(auxId == -1)
                     break;
 
-                printf("\nTitulo: ");
-                fflush(stdin);
-                gets(lista[auxIndex].titulo);
-                printf("\nGenero: ");
-                fflush(stdin);
-                gets(lista[auxIndex].genero);
-                printf("\nDuracion: ");
-                scanf("%d", &(lista[auxIndex].duracion));
-                printf("\nDescripcion: ");
-                fflush(stdin);
-                gets(lista[auxIndex].descripcion);
-                printf("\nPuntaje: ");
-                scanf("%d", &(lista[auxIndex].puntaje));
-                printf("\nLink de imagen: ");
-                fflush(stdin);
-                gets(lista[auxIndex].linkImagen);
-
-                remove("movies.dat");
-                for(i = 0; i < TAM; i++)
-                {
-                    agregarPelicula(lista[i]);
-                }
+                if(modificarPelicula(lista, TAM, auxId) == -1)
+                    printf("Id inexistente\n");
 
                 break;
 

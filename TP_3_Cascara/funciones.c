@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include<string.h>
+#include <string.h>
+#include <ctype.h>
 #include "funciones.h"
 
 #define OCUPADO 1
@@ -23,6 +24,65 @@ int agregarPelicula(EMovie movie)
     fclose(binario);
 
     return 1;
+}
+
+int borrarPelicula(EMovie *lista, int len, int id)
+{
+    int i;
+    int retorno = -1;
+    int index;
+    char confirmacion;
+
+    index = buscarPorId(lista, len, id);
+    if(index == -1)
+        return retorno;
+
+    retorno = 1;
+    confirmacion = confirmar("Esta seguro de borrar la pelicula? s/n: ");
+    if(confirmacion == 'n')
+        return retorno;
+
+    lista[index].estado = 0;
+    remove("movies.dat");
+    for(i = 0; i < len; i++)
+    {
+        agregarPelicula(lista[i]);
+    }
+    return retorno;
+}
+
+int modificarPelicula(EMovie *lista, int len, int id)
+{
+    int i;
+    int retorno = -1;
+    int index;
+    char confirmacion;
+
+    index = buscarPorId(lista, len, id);
+    if(index == -1)
+        return retorno;
+
+    retorno = 1;
+    confirmacion = confirmar("Esta seguro de modificar la pelicula? s/n: ");
+    if(confirmacion == 'n')
+        return retorno;
+
+    pedirAlfanumerico("\nTitulo: ", lista[index].titulo);
+    pedirCadena("\nGenero: ", lista[index].genero);
+    lista[index].duracion = pedirNumero("\nDuracion: ");
+    pedirAlfanumerico("\nDescripcion: ", lista[index].descripcion);
+    lista[index].puntaje = pedirNumero("\nPuntaje: ");
+    printf("\nLink de imagen: ");
+    fflush(stdin);
+    gets(lista[index].linkImagen);
+
+    remove("movies.dat");
+    for(i = 0; i < len; i++)
+    {
+        agregarPelicula(lista[i]);
+    }
+
+    return retorno;
 }
 
 void generarPagina(EMovie lista[], char nombre[], int cant)
@@ -127,16 +187,18 @@ int buscarPorId(EMovie lista[], int len, int id)
     return index;
 }
 
-int pedirId(EMovie lista[], int len)
+int pedirId()
 {
-    int id;
-    int retorno;
+    char id[4];
     printf("Ingrese el id: ");
-    scanf("%d", &id);
-    retorno = buscarPorId(lista, len, id);
-    if(retorno == -1)
-        printf("Id inexistente\n");
-    return retorno;
+    scanf("%s", id);
+    if(!esEnteroPositivo(id))
+    {
+        printf("Id invalida\n");
+        return -1;
+    }
+
+    return atoi(id);
 }
 
 int calcularCantidad(EMovie lista[], int len)
@@ -149,4 +211,122 @@ int calcularCantidad(EMovie lista[], int len)
             cantidad++;
     }
     return cantidad;
+}
+
+char confirmar(char mensaje[])
+{
+    char aux;
+    printf("%s", mensaje);
+    fflush(stdin);
+    scanf("%c", &aux);
+    return aux;
+}
+
+int buscarEspacioLibre(EMovie lista[], int len)
+{
+    int index = -1;
+    int i;
+    for(i = 0; i < len; i++)
+    {
+        if(lista[i].estado == LIBRE)
+        {
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+
+int esSoloLetras(char cadena[])
+{
+   int i = 0;
+   while(cadena[i] != '\0')
+   {
+       if((cadena[i] != ' ') && (cadena[i] < 'a' || cadena[i] > 'z') && (cadena[i] < 'A' || cadena[i] > 'Z'))
+           return 0;
+       i++;
+   }
+   return 1;
+}
+
+int esEnteroPositivo(char cadena[])
+{
+    int i = 0;
+    while(cadena[i] != '\0')
+    {
+        if(!isdigit(cadena[i]))
+            return 0;
+        i++;
+    }
+    return 1;
+}
+
+int esAlfanumerico(char cadena[])
+{
+   int i=0;
+   while(cadena[i] != '\0')
+   {
+       if((cadena[i] != ' ') && (cadena[i] < 'a' || cadena[i] > 'z') && (cadena[i] < 'A' || cadena[i] > 'Z') && (cadena[i] < '0' || cadena[i] > '9'))
+           return 0;
+       i++;
+   }
+   return 1;
+}
+
+int pedirNumero(char mensaje[])
+{
+    int retorno;
+    int validacion = -1;
+    char aux[4];
+    do
+    {
+        printf("%s", mensaje);
+        fflush(stdin);
+        gets(aux);
+        if(esEnteroPositivo(aux))
+        {
+            validacion = 1;
+            retorno = atoi(aux);
+        }
+        else
+            printf("Dato invalido\n");
+    }
+    while(validacion == -1);
+    return retorno;
+}
+
+void pedirCadena(char mensaje[], char salida[])
+{
+    int validacion = -1;
+    char aux[200];
+    do
+    {
+        printf("%s", mensaje);
+        fflush(stdin);
+        gets(aux);
+        if(esSoloLetras(aux))
+            validacion = 1;
+        else
+            printf("Dato invalido\n");
+    }
+    while(validacion == -1);
+    strcpy(salida, aux);
+}
+
+void pedirAlfanumerico(char mensaje[], char salida[])
+{
+    int validacion = -1;
+    char aux[200];
+    do
+    {
+        printf("%s", mensaje);
+        fflush(stdin);
+        gets(aux);
+        if(esAlfanumerico(aux))
+            validacion = 1;
+        else
+            printf("Dato invalido\n");
+    }
+    while(validacion == -1);
+    strcpy(salida, aux);
 }

@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1529591450 source:d:\gonzalo\tp_laboratorio_1\preparcial\main.c
+	<stdio.h>
+	<stdlib.h>
+	"ArrayList.h"
+	"cliente.h"
+
+1529582323 d:\gonzalo\tp_laboratorio_1\preparcial\arraylist.h
+
+1529588115 source:d:\gonzalo\tp_laboratorio_1\preparcial\arraylist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"ArrayList.h"
+
+1529591262 source:d:\gonzalo\tp_laboratorio_1\preparcial\cliente.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"cliente.h"
+
+1529591123 d:\gonzalo\tp_laboratorio_1\preparcial\cliente.h
+	<stdio.h>
+	<stdlib.h>
+

@@ -3,104 +3,80 @@
 #include <string.h>
 #include "cliente.h"
 
+#define ATENDIDO 0
+#define PENDIENTE 1
 
-eCliente* nuevoCliente(void)
+eTramite* nuevoTramite(void)
 {
-    eCliente* nuevo = (eCliente*)malloc(sizeof(eCliente));
+    eTramite* nuevo = (eTramite*)malloc(sizeof(eTramite));
     return nuevo;
 }
 
-int setDni(eCliente* cliente, int dni)
+int setDni(eTramite* tramite, int dni)
 {
     int retorno = -1;
-    if(cliente != NULL)
+    if(tramite != NULL)
     {
-        cliente->dni = dni;
+        tramite->dni = dni;
         retorno = 1;
     }
     return retorno;
 }
 
-int setTramite(eCliente* cliente, char* tramite)
+int setEstado(eTramite* tramite, int estado)
 {
     int retorno = -1;
-    if(cliente != NULL && tramite != NULL)
+    if(tramite != NULL)
     {
-        strcpy(cliente->tramite, tramite);
+        tramite->estado = estado;
         retorno = 1;
     }
     return retorno;
 }
 
-int setEstado(eCliente* cliente, int estado)
+int getDni(eTramite* tramite)
 {
     int retorno = -1;
-    if(cliente != NULL)
+    if(tramite != NULL)
     {
-        cliente->estado = estado;
+        retorno = tramite->dni;
+    }
+    return retorno;
+}
+
+int getEstado(eTramite* tramite)
+{
+    int retorno = -1;
+    if(tramite != NULL)
+    {
+        retorno = tramite->estado;
+    }
+    return retorno;
+}
+
+void mostrarTramite(eTramite* tramite)
+{
+    if(tramite != NULL)
+        printf("\nDNI: %d  --  TURNO: %d\n", tramite->dni, tramite->turno);
+}
+
+int setTurno(eTramite* tramite, int turno)
+{
+    int retorno = -1;
+    if(tramite != NULL)
+    {
+        tramite->turno = turno;
         retorno = 1;
     }
     return retorno;
 }
 
-int getDni(eCliente* cliente)
+int getTurno(eTramite* tramite)
 {
     int retorno = -1;
-    if(cliente != NULL)
+    if(tramite != NULL)
     {
-        retorno = cliente->dni;
-    }
-    return retorno;
-}
-
-int getTramite(eCliente* cliente, char* output)
-{
-    int retorno = -1;
-    if(cliente != NULL)
-    {
-        strcpy(output, cliente->tramite);
-        retorno = 1;
-    }
-    return retorno;
-}
-
-int getEstado(eCliente* cliente)
-{
-    int retorno = -1;
-    if(cliente != NULL)
-    {
-        retorno = cliente->estado;
-    }
-    return retorno;
-}
-
-void mostrarCliente(eCliente* cliente)
-{
-    char tramite[10];
-    int dni,
-    getTramite(cliente, tramite);
-    dni = getDni(cliente);
-    if(cliente != NULL)
-        printf("\nDNI: %d  --  TRAMITE: %s\n", dni, tramite);
-}
-
-int setTurno(eCliente* cliente, int turno)
-{
-    int retorno = -1;
-    if(cliente != NULL)
-    {
-        cliente->turno = turno;
-        retorno = 1;
-    }
-    return retorno;
-}
-
-int getTurno(eCliente* cliente)
-{
-    int retorno = -1;
-    if(cliente != NULL)
-    {
-        retorno = cliente->turno;
+        retorno = tramite->turno;
     }
     return retorno;
 }

@@ -3,19 +3,19 @@
 #include "ArrayList.h"
 #include "cliente.h"
 
-int nuevoTurno(ArrayList*);
-void listar(ArrayList*);
-int dni;
-int turno;
-char* regular = "REGULAR";
-char* urgente = "URGENTE";
-eCliente* cliente;
+#define ATENDIDO 0
+#define PENDIENTE 1
 
+void listarPendientes(ArrayList*);
+void listarAtendidos(ArrayList*);
+int compararTramites(eTramite*, eTramite*);
+void proximo(ArrayList*, ArrayList*);
 
 int main()
 {
     ArrayList* listaRegulares = al_newArrayList();
     ArrayList* listaUrgentes = al_newArrayList();
+    ArrayList* aux = al_newArrayList();
 
 
     if(listaRegulares == NULL || listaUrgentes == NULL)
@@ -24,7 +24,12 @@ int main()
         return -1;
     }
 
+    int dni;
+    eTramite* tramite;
+    int proxRegular = 1;
+    int proxUrgente = 1;
     int opcion;
+
     do
     {
         printf("\nMENU:\n");
@@ -40,58 +45,75 @@ int main()
         switch(opcion)
         {
         case 1:
-            cliente = nuevoCliente();
-            if(cliente == NULL)
+            tramite = nuevoTramite();
+            if(tramite == NULL)
             {
                 printf("\nError");
                 break;
             }
             printf("\nDni: ");
             scanf("%d", &dni);
-            setDni(cliente, dni);
-            setEstado(cliente, 1);
-            turno = nuevoTurno(listaUrgentes);
-            setTurno(cliente, turno);
-            setTramite(cliente, urgente);
-            listaUrgentes->add(listaUrgentes, cliente);
-            printf("\nSu turno es: %d", turno);
-
-            mostrarCliente(cliente);
-
+            setDni(tramite, dni);
+            setEstado(tramite, PENDIENTE);
+            setTurno(tramite, proxUrgente);
+            if(listaUrgentes->add(listaUrgentes, tramite) == -1)
+            {
+                printf("\nError");
+                break;
+            }
+            printf("\nSu turno es: %d", proxUrgente);
+            proxUrgente++;
             break;
 
         case 2:
-            cliente = nuevoCliente();
-            if(cliente == NULL)
+            tramite = nuevoTramite();
+            if(tramite == NULL)
             {
                 printf("\nError");
                 break;
             }
             printf("\nDni: ");
             scanf("%d", &dni);
-            setDni(cliente, dni);
-            setEstado(cliente, 1);
-            turno = nuevoTurno(listaRegulares);
-            setTurno(cliente, turno);
-            setTramite(cliente, regular);
-            listaRegulares->add(listaRegulares, cliente);
-            printf("\nSu turno es: %d", turno);
-
-            mostrarCliente(cliente);
-
+            setDni(tramite, dni);
+            setEstado(tramite, PENDIENTE);
+            setTurno(tramite, proxRegular);
+            if(listaRegulares->add(listaRegulares, tramite) == -1)
+            {
+                printf("\nError");
+                break;
+            }
+            printf("\nSu turno es: %d", proxRegular);
+            proxRegular++;
             break;
+
         case 3:
+            proximo(listaUrgentes, listaRegulares);
             break;
+
         case 4:
-            printf("\nPENDIENTES:\n");
-            listar(listaRegulares);
-            listar(listaUrgentes);
+            printf("\nREGULARES:\n");
+            listarPendientes(listaRegulares);
+            printf("\nURGENTES:\n");
+            listarPendientes(listaUrgentes);
             break;
+
         case 5:
+            printf("\nATENDIDOS REGULARES: ");
+            aux = listaRegulares->clone(listaRegulares);
+            aux->sort(aux, compararTramites, 0);
+            listarAtendidos(aux);
+
+            printf("\nATENDIDOS URGENTES: ");
+            aux = listaUrgentes->clone(listaUrgentes);
+            aux->sort(aux, compararTramites, 0);
+            listarAtendidos(aux);
+
             break;
+
         case 6:
             printf("Programa finalizado\n");
             break;
+
         default:
             printf("Opcion invalida\n");
             break;
@@ -101,54 +123,75 @@ int main()
     return 0;
 }
 
-int nuevoTurno(ArrayList* lista)
+void listarPendientes(ArrayList* lista)
 {
-    int i;
-    int turno = 1;
-    eCliente* aux;
-    if(lista->isEmpty(lista) == 1)
-    {
-        return turno;
-    }
-    for(i = 0; i < lista->len(lista); i++)
-    {
-        aux = lista->get(lista, i);
-        if(getEstado(aux) == 1)
-        {
-            if(getTurno(aux) >= turno)
-                turno = getTurno(aux) + 1;
-        }
-    }
-    return turno;
-}
-
-void listar(ArrayList* lista)
-{
-    eCliente* aux;
+    eTramite* aux;
     int i;
     for(i = 0; i < lista->len(lista); i++)
     {
         aux = lista->get(lista, i);
-        if(getEstado(aux) == 1)
+        if(getEstado(aux) == PENDIENTE)
         {
-            mostrarCliente(aux);
+            mostrarTramite(aux);
         }
     }
 }
 
-int existeDni(ArrayList* lista, int dni)
+void proximo(ArrayList* urgentes, ArrayList* regulares)
 {
-    eCliente* aux;
+    eTramite* aux;
     int i;
-    int retorno = -1;
+    if(!urgentes->isEmpty(urgentes))
+    {
+        for(i = 0; i < urgentes->len(urgentes); i++)
+        {
+            aux = urgentes->get(urgentes, i);
+            if(getEstado(aux) == PENDIENTE)
+            {
+                printf("\nTRAMITE URGENTE: ");
+                mostrarTramite(aux);
+                setEstado(aux, ATENDIDO);
+                return;
+            }
+        }
+    }
+    if(!regulares->isEmpty(regulares))
+    {
+        for(i = 0; i < regulares->len(regulares); i++)
+        {
+            aux = regulares->get(regulares, i);
+            if(getEstado(aux) == PENDIENTE)
+            {
+                printf("\nTRAMITE REGULAR: ");
+                mostrarTramite(aux);
+                setEstado(aux, ATENDIDO);
+                return;
+            }
+        }
+    }
+}
+
+void listarAtendidos(ArrayList* lista)
+{
+    eTramite* aux;
+    int i;
     for(i = 0; i < lista->len(lista); i++)
     {
         aux = lista->get(lista, i);
-        if(getDni(aux) == dni)
+        if(getEstado(aux) == ATENDIDO)
         {
-            retorno = 1;
-            break;
+            mostrarTramite(aux);
         }
     }
+}
+
+int compararTramites(eTramite* t1, eTramite* t2)
+{
+    int retorno;
+    if(t1 == NULL || t2 == NULL)
+        retorno = 0;
+    else
+        retorno = (t1->dni <= t2->dni) ? -1 : 1;
     return retorno;
 }
+

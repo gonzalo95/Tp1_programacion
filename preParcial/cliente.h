@@ -4,30 +4,25 @@
 typedef struct
 {
     int dni;
-    char tramite[10];
     int estado;
     int turno;
-}eCliente;
+}eTramite;
 
 
-eCliente* nuevoCliente(void);
+eTramite* nuevoTramite(void);
 
-int setDni(eCliente*, int);
+int setDni(eTramite*, int);
 
-int setTramite(eCliente*, char*);
+int setEstado(eTramite*, int);
 
-int setEstado(eCliente*, int);
+int setTurno(eTramite*, int);
 
-int setTurno(eCliente*, int);
+int getDni(eTramite*);
 
-int getDni(eCliente*);
+int getEstado(eTramite*);
 
-int getTramite(eCliente* cliente, char* output);
+int getTurno(eTramite*);
 
-int getEstado(eCliente*);
-
-int getTurno(eCliente*);
-
-void mostrarCliente(eCliente*);
+void mostrarTramite(eTramite*);
 
 

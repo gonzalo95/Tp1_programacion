@@ -23,3 +23,27 @@
 	<stdio.h>
 	<stdlib.h>
 
+1529864840 source:c:\users\planta alta\desktop\tp_laboratorio_1\preparcial\arraylist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"ArrayList.h"
+
+1529864840 c:\users\planta alta\desktop\tp_laboratorio_1\preparcial\arraylist.h
+
+1529872926 source:c:\users\planta alta\desktop\tp_laboratorio_1\preparcial\cliente.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"cliente.h"
+
+1529871988 c:\users\planta alta\desktop\tp_laboratorio_1\preparcial\cliente.h
+	<stdio.h>
+	<stdlib.h>
+
+1529872710 source:c:\users\planta alta\desktop\tp_laboratorio_1\preparcial\main.c
+	<stdio.h>
+	<stdlib.h>
+	"ArrayList.h"
+	"cliente.h"
+
